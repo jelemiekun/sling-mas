@@ -14,11 +14,18 @@ public:
 	static Game* getInstance();
 
 private:
-	void initWindow();
+	bool running;
+	SDL_Event event;
+
+private:
+	bool initWindow();
 
 public:
 	void initAll();
 	void input();
 	void update(const float& deltaTime);
 	void render() const;
+
+	bool isRunning() const;
+	void setRunning(const bool& isRunning);
 };

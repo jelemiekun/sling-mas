@@ -25,12 +25,15 @@ public:
 
 	bool init(const int& windowWidth, const int& windowHeight, const bool& resizable);
 
-	void handleEvent(SDL_Event& event);
+	void input(SDL_Event& event);
 	void render() const;
 
 	void focus();
 	void free();
+	void toggleFullscreen();
 
+	SDL_Renderer* getRenderer() const;
+	int getWindowID() const;
 	int getWidth() const;
 	int getHeight() const;
 	bool hasMouseFocus() const;

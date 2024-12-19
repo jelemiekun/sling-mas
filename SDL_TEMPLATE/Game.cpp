@@ -1,25 +1,29 @@
 #include "Game.h"
 #include "GameWindow.h"
+#include <spdlog/spdlog.h>
 
 static GameWindow mainWindow;
 
-Game::Game() {}
+Game::Game() : running(false) {}
 
 Game* Game::getInstance() {
 	static Game instance;
 	return &instance;
 }
 
-void Game::initWindow() {
-	mainWindow.init(640, 480, true);
+bool Game::initWindow() {
+	return mainWindow.init(640, 480, true);
 }
 
 void Game::initAll() {
-	initWindow();
+	if (initWindow())
+		running = true;
 }
 
 void Game::input() {
-
+	while (SDL_PollEvent(&event)) {
+		mainWindow.input(event);
+	}
 }
 
 void Game::update(const float& deltaTime) {
@@ -27,5 +31,14 @@ void Game::update(const float& deltaTime) {
 }
 
 void Game::render() const {
+	mainWindow.render();
+}
 
+bool Game::isRunning() const {
+	return running;
+}
+
+void Game::setRunning(const bool& isRunning) {
+	spdlog::info("Setting running game to {} ", isRunning);
+	running = false;
 }

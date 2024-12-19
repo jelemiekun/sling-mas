@@ -1,5 +1,6 @@
 #include "GameWindow.h"
 #include "AppInfo.h"
+#include "Game.h"
 #include <spdlog/spdlog.h>
 #include <spdlog/logger.h>
 
@@ -63,7 +64,7 @@ bool GameWindow::init(const int& windowWidth, const int& windowHeight, const boo
     return initSuccess;
 }
 
-void GameWindow::handleEvent(SDL_Event& event) {
+void GameWindow::input(SDL_Event& event) {
     if (event.type == SDL_WINDOWEVENT && event.window.windowID == mWindowID) {
         switch (event.window.event) {
         case SDL_WINDOWEVENT_SHOWN:
@@ -99,7 +100,12 @@ void GameWindow::handleEvent(SDL_Event& event) {
             SDL_HideWindow(mWindow);
             mShown = false;
             break;
+            
         }
+    } else if (event.type == SDL_QUIT && mWindowID == 1) {
+        Game::getInstance()->setRunning(false);
+    } else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_F11 && mWindowID == 1) {
+        toggleFullscreen();
     }
 }
 
@@ -130,7 +136,19 @@ void GameWindow::free() {
     mWidth = mHeight = 0;
 }
 
+void GameWindow::toggleFullscreen() {
+    if (mFullScreen) {
+        SDL_SetWindowFullscreen(mWindow, 0);
+        mFullScreen = false;
+    } else {
+        SDL_SetWindowFullscreen(mWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
+        mFullScreen = true;
+    }
+}
 
+
+SDL_Renderer* GameWindow::getRenderer() const { return mRenderer; }
+int GameWindow::getWindowID() const { return mWindowID; }
 int GameWindow::getWidth() const { return mWidth; }
 int GameWindow::getHeight() const { return mHeight; }
 bool GameWindow::hasMouseFocus() const { return mMouseFocus; }

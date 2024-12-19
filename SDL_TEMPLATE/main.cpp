@@ -6,5 +6,11 @@ int SDL_main(int argc, char* argv[]) {
     
     game->initAll();
 
+    while (game->isRunning()) {
+        game->input();
+        game->update(1.0f);
+        game->render();
+    }
+
     return 0;
 }
