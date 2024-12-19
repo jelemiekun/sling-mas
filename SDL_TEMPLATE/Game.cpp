@@ -1,8 +1,9 @@
 #include "Game.h"
 #include "GameWindow.h"
 #include <spdlog/spdlog.h>
+#include <memory>
 
-static GameWindow mainWindow;
+static std::unique_ptr<GameWindow> mainWindow = std::make_unique<GameWindow>;
 
 Game::Game() : running(false) {}
 
