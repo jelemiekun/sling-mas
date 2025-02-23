@@ -109,10 +109,15 @@ void GameWindow::input(SDL_Event& event) {
     }
 }
 
-void GameWindow::render() const {
+void GameWindow::renderClear() const {
     if (!mMinimized) {
-        SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0);
+        SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
         SDL_RenderClear(mRenderer);
+    }
+}
+
+void GameWindow::renderPresent() const {
+    if (!mMinimized) {
         SDL_RenderPresent(mRenderer);
     }
 }

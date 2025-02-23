@@ -1,9 +1,11 @@
 #include "Game.h"
 #include "GameWindow.h"
+#include "Background.h"
+#include "Player.h"
+#include "AppInfo.h"
 #include <spdlog/spdlog.h>
-#include <memory>
 
-static std::unique_ptr<GameWindow> mainWindow = std::make_unique<GameWindow>;
+static Player* player = Player::getInstance();
 
 Game::Game() : running(false) {}
 
@@ -13,26 +15,39 @@ Game* Game::getInstance() {
 }
 
 bool Game::initWindow() {
-	return mainWindow.init(640, 480, true);
+	spdlog::info("Initializing main window.");
+	return AppInfo::mainWindow->init(1080, 720, true);
 }
 
 void Game::initAll() {
-	if (initWindow())
+	if (initWindow()) {
+		spdlog::info("Main window initialized.");
+		player->init();
+
 		running = true;
+	}
 }
 
 void Game::input() {
 	while (SDL_PollEvent(&event)) {
-		mainWindow.input(event);
+		AppInfo::mainWindow->input(event);
+		Background::getInstance()->input(event);
+		player->input(event);
 	}
 }
 
 void Game::update(const float& deltaTime) {
-
+	Background::getInstance()->update();
+	player->update(deltaTime);
 }
 
 void Game::render() const {
-	mainWindow.render();
+	AppInfo::mainWindow->renderClear();
+
+	Background::getInstance()->render();
+	player->render();
+
+	AppInfo::mainWindow->renderPresent();
 }
 
 bool Game::isRunning() const {

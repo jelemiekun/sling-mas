@@ -26,7 +26,8 @@ public:
 	bool init(const int& windowWidth, const int& windowHeight, const bool& resizable);
 
 	void input(SDL_Event& event);
-	void render() const;
+	void renderClear() const;
+	void renderPresent() const;
 
 	void focus();
 	void free();
